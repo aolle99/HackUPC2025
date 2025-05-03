@@ -30,6 +30,7 @@ function getFirstGroup(html: string, regex: RegExp) {
 
 export default async function Page(props: { params: Promise<{ image: string }>}){
     const { image } = await props.params;
+    const {siteUrl} = getPublicEnvironment();
     const rawSimilarProducts = await getSimilarProducts(image);
     const similarProducts: Product[] = [];
 
@@ -45,6 +46,10 @@ export default async function Page(props: { params: Promise<{ image: string }>})
 
         const firstFetch = fetch(product.link, {
             method: 'GET',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                'Accept-Language': 'en-US,en;q=0.9',
+            }
          });
 
         const firstHtml = await ((await firstFetch).text());
@@ -55,7 +60,7 @@ export default async function Page(props: { params: Promise<{ image: string }>})
         const fetchHtml = fetch(`${baseURL}?bm-verify=${bmVerifyToken}`);
         const html = await ((await fetchHtml).text());
         // Find the product image
-        const imageSrc = html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || `${baseURL}/images/noImage.png`;
+        const imageSrc = html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || `${siteUrl}/images/noImage.png`;
         similarProducts.push({
             ...rawSimilarProducts[similarProducts.length],
             imageSrc,
