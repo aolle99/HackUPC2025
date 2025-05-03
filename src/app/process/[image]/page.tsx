@@ -4,9 +4,9 @@ import { Card } from '@/lib/Card';
 import { Product, RawProduct } from '@/lib/Product';
 
 async function getSimilarProducts(image: string): Promise<RawProduct[]>{
-    const {inditexApiUrl, inditexApiKey, siteUrl, imageTest} = getPublicEnvironment();
+    const {inditexApiUrl, inditexApiKey, siteUrl} = getPublicEnvironment();
 
-    const response = await ky(`${inditexApiUrl}?image=${imageTest}`, {
+    const response = await ky(`${inditexApiUrl}?image=${siteUrl}/image/${image}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${inditexApiKey}`,
