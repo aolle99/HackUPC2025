@@ -22,7 +22,7 @@ async function getSimilarProducts(image: string): Promise<Product[]>{
     return response.json();
 }
 
-export default async function Page(props: { params: { image: string }}){
+export default async function Page(props: { params: Promise<{ image: string }>}){
     const { image } = await props.params;
     const similarProducts = await getSimilarProducts(image);
     const products = similarProducts.map((product: Product, idx: number) => <li key={idx}>{product.name}</li>);

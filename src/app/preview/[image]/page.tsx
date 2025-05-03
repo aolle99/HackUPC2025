@@ -1,19 +1,18 @@
 import Image from 'next/image'
 import Link from 'next/link';
 
-export default function Page(props: { params: { image: string }}){
-  const { params } = props;
+export default async function Page(props: { params: Promise<{ image: string }>}){
+    const { image } = await props.params;
+    return (
+        <div className='flex flex-col items-center'>
+            <Image
+                src={`/images/${image}`}
+                width={500}
+                height={700}
+                alt="Picture of hoodie"
+            />
 
-  return (
-    <div className='flex flex-col items-center'>
-      <Image
-        src={`/images/${params.image}`}
-        width={500}
-        height={700}
-        alt="Picture of hoodie"
-      />
-
-      <Link href={`/process/${params.image}`}>Process</Link>
-    </div>
-  )
+            <Link href={`/process/${image}`}>Process</Link>
+        </div>
+    )
 }
