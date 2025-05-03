@@ -1,17 +1,14 @@
 import { getPublicEnvironment } from '@/lib/utils';
+import ky from 'ky';
+import puppeteer from 'puppeteer';
+import * as cheerio from "cheerio";
+import { Card } from '@/lib/Card';
+import { Product, RawProduct } from '@/lib/Product';
 
-type Product = {
-    id: string | null,
-    name: string,
-    price: { currency: string, value: object[] },
-    link: string,
-    brand: string
-  };
+async function getSimilarProducts(image: string): Promise<RawProduct[]>{
+    const {inditexApiUrl, inditexApiKey, siteUrl} = getPublicEnvironment();
 
-async function getSimilarProducts(image: string): Promise<Product[]>{
-    const {inditexApiUrl, inditexApiKey} = getPublicEnvironment();
-
-    const response = await fetch(`${inditexApiUrl}?image=http://localhost:3000/image/${image}`, {
+    const response = await ky(`${inditexApiUrl}?image=${siteUrl}/image/${image}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${inditexApiKey}`,
@@ -22,13 +19,36 @@ async function getSimilarProducts(image: string): Promise<Product[]>{
     return response.json();
 }
 
-export default async function Page(props: { params: Promise<{ image: string }>}){
+export default async function Page(props: { params: { image: string }}){
     const { image } = await props.params;
-    const similarProducts = await getSimilarProducts(image);
-    const products = similarProducts.map((product: Product, idx: number) => <li key={idx}>{product.name}</li>);
+    const rawSimilarProducts = await getSimilarProducts(image);
+
+    console.log(rawSimilarProducts)
+
+    const similarProducts: Product[] = [];
+    const browser = await puppeteer.launch({ headless: undefined });
+    const page = await browser.newPage();
+    await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+
+    for (const product of rawSimilarProducts) {    
+        await page.goto(product.link, { waitUntil: 'networkidle2' });
+        const html = await page.content();
+        const $ = cheerio.load(html);
+
+        // Find the product image
+        const imageUrl: string = $('.media-image__image').attr("src")!;
+        similarProducts.push({
+            ...rawSimilarProducts[similarProducts.length],
+            imageSrc: imageUrl
+        });
+    }
 
     return (
-        <ul>{ products }</ul>
-        
+        <div className='flex flex-col items-center'>
+            <h1>Similar results</h1>
+            <div className='flex flex-row gap-4'>
+                { similarProducts.map((product: Product, idx: number) => <Card key={idx} productInfo={product}/>) }
+            </div>
+        </div>
     )
 }
