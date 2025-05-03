@@ -19,7 +19,7 @@ async function getSimilarProducts(image: string): Promise<RawProduct[]>{
     return response.json();
 }
 
-export default async function Page(props: { params: { image: string }}){
+export default async function Page(props: { params: Promise<{ image: string }>}){
     const { image } = await props.params;
     const rawSimilarProducts = await getSimilarProducts(image);
 
