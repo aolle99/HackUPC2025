@@ -1,4 +1,3 @@
-// src/app/image/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import ImageStorageService from '@/lib/imageStore';
 
@@ -7,7 +6,7 @@ export async function GET(
     { params }: { params: { id: string } }
 ) {
     try {
-        const imageId = params.id;
+        const {id: imageId} = await params;
         const imageStorage = ImageStorageService.getInstance();
         const image = imageStorage.getImage(imageId);
 
