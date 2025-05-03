@@ -5,7 +5,6 @@ import Image from 'next/image';
 export function Card(props: {productInfo: Product}) {
     const { imageSrc, name, link, brand, price} = props.productInfo;
 
-    console.log(props.productInfo)
     return (
         <div className="card">
             <a href={link}>
