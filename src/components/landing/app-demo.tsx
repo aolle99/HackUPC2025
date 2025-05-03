@@ -1,31 +1,39 @@
 "use client";
 
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import {useState} from "react";
+import {cn} from "@/lib/utils";
 import ImageUploader from "@/components/ui/ImageUploader";
 import {CameraCapture} from "@/components/ui/CameraCapture";
 import {useRouter} from "next/navigation";
+import {Button} from "@/components/ui/button";
+import {Send} from "lucide-react";
 
 export function AppDemo() {
     const [activeTab, setActiveTab] = useState<"upload" | "camera" | "results">("upload");
-    const [, setUploadedImage] = useState<string | null>(null);
-    const [, setCapturedImage] = useState<string | null>(null);
+    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+    const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
     const router = useRouter()
-    const handleLinkGenerated = (imageUrl: string) => {
-        const imageUrlWithoutBase = imageUrl.replace(`image/`, '');
-        router.push(`/preview/${imageUrlWithoutBase}`);
+    const handleLinkGenerated = (_imageUrl: string, imageId: string) => {
+        setUploadedImage(imageId)
+
     };
 
     const handleImageCapture = (imageData: string) => {
         setCapturedImage(imageData);
-
-        // Aquí puedes enviar la imagen a tu API o procesarla
-        console.log("Imagen capturada:", imageData.substring(0, 50) + "...");
     };
+
+    const processImage = () => {
+        if (activeTab === "upload") {
+            router.push(`/process/${uploadedImage}`);
+        } else {
+            router.push(`/process/${capturedImage}`);
+        }
+    }
+
     const tabs = [
-        { id: "upload", label: "Subir foto" },
-        { id: "camera", label: "Usar cámara" },
+        {id: "upload", label: "Subir foto"},
+        {id: "camera", label: "Usar cámara"},
     ];
 
     return (
@@ -80,8 +88,20 @@ export function AppDemo() {
                             onImageCapture={handleImageCapture}
                             aspectRatio="4:3"
                             className={"w-full h-full"}
+                            isActive={activeTab === "camera"}
                         />
                     )}
+                </div>
+                <div className="flex justify-center mt-4 mb-2">
+                    <Button
+                        onClick={processImage}
+                        className="px-4 my-6 flex-1 mx-8"
+                        disabled={!uploadedImage && !capturedImage}
+                        size={"lg"}
+                    >
+                        <Send className="w-4 h-4 mr-2" />
+                        Procesar Imagen
+                    </Button>
                 </div>
             </div>
         </div>

@@ -132,6 +132,7 @@ export function CameraCapture({
     }, [isActive]);
 
     if (!isActive) {
+        console.log("La cámara no está activa");
         return null;
     }
 
@@ -139,7 +140,6 @@ export function CameraCapture({
         <div className={cn('flex flex-col w-full max-w-md mx-auto', className)}>
             {/* Canvas oculto para capturar imágenes */}
             <canvas ref={canvasRef} className="hidden" />
-
             {/* Área de visualización */}
             <div className={cn('overflow-hidden bg-slate-100 rounded-lg relative', aspectRatioClass)}>
                 {!capturedImage ? (
