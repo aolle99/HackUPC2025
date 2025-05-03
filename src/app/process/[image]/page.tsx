@@ -11,7 +11,7 @@ type Product = {
 async function getSimilarProducts(image: string): Promise<Product[]>{
     const {inditexApiUrl, inditexApiKey} = getPublicEnvironment();
 
-    const response = await fetch(`${inditexApiUrl}?image=http://localhost:3000/process/${image}`, {
+    const response = await fetch(`${inditexApiUrl}?image=http://localhost:3000/image/${image}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${inditexApiKey}`,
