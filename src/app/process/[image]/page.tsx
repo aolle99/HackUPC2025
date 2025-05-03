@@ -43,15 +43,16 @@ export default async function Page(props: { params: Promise<{ image: string }>})
     }
 
     for (const product of rawSimilarProducts) {
-        console.error("Inicio de la iteración");
         try {
 
-
+        console.error(product.link)
         const firstFetch = fetch(product.link, {
             method: 'GET',
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
                 'Accept-Language': 'en-US,en;q=0.9',
+                'Origin': "http://localhost:3000",
+                'Referer': "http://localhost:3000",
             }
          });
 
