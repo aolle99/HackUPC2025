@@ -5,28 +5,28 @@ const steps = [
     title: "Captura o sube una imagen",
     description:
       "Utiliza la cámara de tu dispositivo o sube una foto de una prenda que te guste.",
-    image: "/placeholder-how-1.svg", // Imágenes de ejemplo - reemplazar con las reales
+    image: "/images/paso1.png", // Imágenes de ejemplo - reemplazar con las reales
   },
   {
     id: 2,
     title: "Análisis visual inteligente",
     description:
       "Nuestra IA analiza la imagen identificando características clave como color, patrón, forma y estilo.",
-    image: "/placeholder-how-2.svg",
+    image: "/images/paso2.png",
   },
   {
     id: 3,
     title: "Búsqueda en catálogo",
     description:
       "El sistema busca en tiempo real en el extenso catálogo de Inditex para encontrar prendas similares.",
-    image: "/placeholder-how-3.svg",
+    image: "/images/paso3.png",
   },
   {
     id: 4,
     title: "Explorar resultados",
     description:
       "Descubre prendas similares o complementarias disponibles en las marcas de Inditex, listas para comprar.",
-    image: "/placeholder-how-4.svg",
+    image: "/images/paso4.png",
   },
 ];
 
@@ -67,9 +67,14 @@ export function HowItWorks() {
                 <div className={`mt-6 md:mt-0 ${idx % 2 === 0 ? 'md:col-start-2' : 'md:col-start-1 md:row-start-1'}`}>
                   <div className="h-64 bg-gradient-to-br from-muted/50 to-muted flex items-center justify-center rounded-lg overflow-hidden">
                     {/* Placeholder para la imagen - usar Image con las imágenes reales */}
-                    <div className="text-muted-foreground italic text-sm">
-                      Imagen ilustrativa del paso {step.id}
-                    </div>
+                    <img
+                      src={step.image}
+                      alt={step.title}
+                      className="object-cover w-full h-full rounded-lg"
+                      loading="lazy"
+                        width={500}
+                        height={500}
+                      />
                   </div>
                 </div>
               </div>

@@ -145,7 +145,7 @@ export function Technology() {
 
       <div className="mt-16 text-center">
         <p className="text-sm text-muted-foreground">
-          Desarrollado por el equipo de innovación tecnológica de Inditex
+          Desarrollado en la HackUPC 2025 por Arnau Casau, Jaya Garcia y Àlex Ollé
         </p>
       </div>
     </div>
