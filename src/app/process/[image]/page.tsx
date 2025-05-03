@@ -44,6 +44,9 @@ export default async function Page(props: { params: Promise<{ image: string }>})
 
     for (const product of rawSimilarProducts) {
         console.error("Inicio de la iteración");
+        try {
+
+
         const firstFetch = fetch(product.link, {
             method: 'GET',
             headers: {
@@ -53,7 +56,7 @@ export default async function Page(props: { params: Promise<{ image: string }>})
          });
 
         const firstHtml = await ((await firstFetch).text());
-
+        console.error("primera iteración");
         const baseURL = (await firstFetch).url; // Reemplaza con la URL original
         const bmVerifyToken = getFirstGroup(firstHtml, /bm-verify=(.*)'"/g).pop(); // Extraído manualmente del HTML
 
@@ -65,6 +68,11 @@ export default async function Page(props: { params: Promise<{ image: string }>})
             ...rawSimilarProducts[similarProducts.length],
             imageSrc,
         });
+        }
+        catch (error) {
+            console.error("Error en la iteración", error);
+            continue;
+        }
     }
 
     return (
