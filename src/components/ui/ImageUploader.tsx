@@ -27,7 +27,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
                                                          acceptedTypes = ['image/png', 'image/jpeg', 'image/gif'],
                                                          className,
                                                          defaultPreview,
-                                                         label = "Subir Imagen",
                                                          generateTemporaryLink = false,
                                                          expirationMinutes = 30
                                                      }) => {
@@ -153,16 +152,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
     // Agregar indicador de generación de enlace
     return (
         <div className={className}>
-            <label className="block text-sm/6 font-medium text-gray-900 mb-2">
-                {label}
-            </label>
-
             <div
                 className={cn(
                     "relative flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-900/25 transition-colors",
-                    "px-6 py-10 cursor-pointer hover:bg-gray-50",
+                    "px-6 py-10 cursor-pointer hover:bg-gray-50 h-full w-full",
                     isDragging && "bg-blue-50 border-blue-500",
-                    preview && "p-2"
+                    preview && "p-2",
                 )}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
@@ -183,13 +178,13 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
                         >
                             <X size={16}/>
                         </button>
-                        <div className="relative w-full max-h-64 overflow-hidden flex items-center justify-center">
+                        <div className="relative w-full h-64 overflow-hidden flex items-center justify-center">
                             <Image
-                                width={100}
-                                height={100}
                                 src={preview}
                                 alt="Vista previa"
-                                className="max-w-full max-h-64 object-contain"
+                                fill
+                                className="object-contain"
+                                sizes="(max-width: 768px) 100vw, 50vw"
                             />
                         </div>
                     </div>
@@ -226,8 +221,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             </div>
 
             {isGeneratingLink && (
-                <div className="mt-2 text-sm text-blue-600">
-                    Generando enlace temporal...
+                <div className="mt-2 text-sm text-gray-600">
+                    Subiendo imagen...
                 </div>
             )}
 
