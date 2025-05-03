@@ -3,7 +3,7 @@ import { getPublicEnvironment } from '@/lib/utils';
 type Product = {
     id: string | null,
     name: string,
-    price: { currency: string, value: Object[] },
+    price: { currency: string, value: object[] },
     link: string,
     brand: string
   };
