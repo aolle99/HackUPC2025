@@ -1,15 +1,14 @@
-import { getPublicEnvironment } from '@/lib/utils';
+import {getPublicEnvironment} from '@/lib/utils';
 import ky from 'ky';
-import { Card } from '@/lib/Card';
-import { Product, RawProduct } from '@/lib/Product';
+import {Card} from '@/lib/Card';
+import {Product, RawProduct} from '@/lib/Product';
 
-async function getSimilarProducts(image: string): Promise<RawProduct[]>{
+async function getSimilarProducts(image: string): Promise<RawProduct[]> {
     const {inditexApiUrl, inditexApiKey, siteUrl, imageTest} = getPublicEnvironment();
     let url;
-    if(imageTest){
+    if (imageTest) {
         url = imageTest
-    }
-    else{
+    } else {
         url = `${siteUrl}/image/${image}`;
     }
     const response = await ky(`${inditexApiUrl}?image=${url}`, {
@@ -26,10 +25,10 @@ async function getSimilarProducts(image: string): Promise<RawProduct[]>{
 
 function getFirstGroup(html: string, regex: RegExp) {
     return Array.from(html.matchAll(regex), m => m[1]);
-  }
+}
 
-export default async function Page(props: { params: Promise<{ image: string }>}){
-    const { image } = await props.params;
+export default async function Page(props: { params: Promise<{ image: string }> }) {
+    const {image} = await props.params;
     const {siteUrl} = getPublicEnvironment();
     const rawSimilarProducts = await getSimilarProducts(image);
     const similarProducts: Product[] = [];
@@ -43,43 +42,31 @@ export default async function Page(props: { params: Promise<{ image: string }>})
     }
 
     for (const product of rawSimilarProducts) {
-        try {
-
-        console.error(product.link)
         const firstFetch = fetch(product.link, {
             method: 'GET',
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
                 'Host': "zara.com",
             }
-         });
-        console.error((await firstFetch))
+        });
 
         const firstHtml = await ((await firstFetch).text());
-        console.error("primera iteración");
         const baseURL = (await firstFetch).url; // Reemplaza con la URL original
         const bmVerifyToken = getFirstGroup(firstHtml, /bm-verify=(.*)'"/g).pop(); // Extraído manualmente del HTML
-        console.error(firstHtml)
         const fetchHtml = fetch(`${baseURL}?bm-verify=${bmVerifyToken}`);
         const html = await ((await fetchHtml).text());
-        // Find the product image
-        const imageSrc = html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || `${siteUrl}/images/noImage.png`;
+        const imageSrc = html.match(/https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || `${siteUrl}/images/noImage.png`;
         similarProducts.push({
             ...rawSimilarProducts[similarProducts.length],
             imageSrc,
         });
-        }
-        catch (error) {
-            console.error("Error en la iteración", error);
-            continue;
-        }
     }
 
     return (
         <div className='flex flex-col items-center'>
             <h1>Similar results</h1>
             <div className='flex flex-row gap-4'>
-                { similarProducts.map((product: Product, idx: number) => <Card key={idx} productInfo={product}/>) }
+                {similarProducts.map((product: Product, idx: number) => <Card key={idx} productInfo={product}/>)}
             </div>
         </div>
     )
