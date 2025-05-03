@@ -10,7 +10,7 @@ export default function Home() {
         <div className="flex flex-col w-full">
             {/* Hero Section */}
             <section className="relative overflow-hidden bg-background py-16 md:py-24">
-                <div className="container px-4 md:px-8">
+                <div className="container px-4 md:px-8 m-auto">
                     <div className="mx-auto max-w-3xl text-center">
                         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
                             Descubre tu estilo con{" "}
