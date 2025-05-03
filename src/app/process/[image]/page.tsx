@@ -55,7 +55,7 @@ export default async function Page(props: { params: Promise<{ image: string }>})
         const fetchHtml = fetch(`${baseURL}?bm-verify=${bmVerifyToken}`);
         const html = await ((await fetchHtml).text());
         // Find the product image
-        const imageSrc = html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || "https://fakeimg.pl/600x400?text=No+Content+Available&font_size=50";
+        const imageSrc = html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || `${baseURL}/images/noImage.png`;
         similarProducts.push({
             ...rawSimilarProducts[similarProducts.length],
             imageSrc,
