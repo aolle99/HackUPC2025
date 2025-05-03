@@ -41,10 +41,10 @@ export default async function Page(props: { params: Promise<{ image: string }>})
 
         const fetchHtml = fetch(`${baseURL}?bm-verify=${bmVerifyToken}`);
         const html = await ((await fetchHtml).text());
-
+        console.log(html);
         // Find the product image
         const imageSrc = html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || "";
-
+        console.log(html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g));
         similarProducts.push({
             ...rawSimilarProducts[similarProducts.length],
             imageSrc,
