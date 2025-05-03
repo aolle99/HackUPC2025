@@ -50,10 +50,10 @@ export default async function Page(props: { params: Promise<{ image: string }>})
             method: 'GET',
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                'Accept-Language': 'en-US,en;q=0.9',
                 'Host': "zara.com",
             }
          });
+        console.error((await firstFetch))
 
         const firstHtml = await ((await firstFetch).text());
         console.error("primera iteración");
@@ -62,11 +62,8 @@ export default async function Page(props: { params: Promise<{ image: string }>})
         console.error(firstHtml)
         const fetchHtml = fetch(`${baseURL}?bm-verify=${bmVerifyToken}`);
         const html = await ((await fetchHtml).text());
-        console.error(html);
         // Find the product image
         const imageSrc = html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || `${siteUrl}/images/noImage.png`;
-        console.error("tercera iteración");
-        console.error(html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g))
         similarProducts.push({
             ...rawSimilarProducts[similarProducts.length],
             imageSrc,
