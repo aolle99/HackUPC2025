@@ -153,16 +153,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
     // Agregar indicador de generación de enlace
     return (
         <div className={className}>
-            <label className="block text-sm/6 font-medium text-gray-900 mb-2">
-                {label}
-            </label>
-
             <div
                 className={cn(
                     "relative flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-900/25 transition-colors",
-                    "px-6 py-10 cursor-pointer hover:bg-gray-50",
+                    "px-6 py-10 cursor-pointer hover:bg-gray-50 h-full w-full",
                     isDragging && "bg-blue-50 border-blue-500",
-                    preview && "p-2"
+                    preview && "p-2",
                 )}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
