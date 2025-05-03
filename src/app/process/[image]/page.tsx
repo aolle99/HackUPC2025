@@ -1,34 +1,73 @@
-import { getPublicEnvironment } from '@/lib/utils';
+import {getPublicEnvironment} from '@/lib/utils';
+import ky from 'ky';
+import {Card} from '@/lib/Card';
+import {Product, RawProduct} from '@/lib/Product';
 
-type Product = {
-    id: string | null,
-    name: string,
-    price: { currency: string, value: object[] },
-    link: string,
-    brand: string
-  };
-
-async function getSimilarProducts(image: string): Promise<Product[]>{
-    const {inditexApiUrl, inditexApiKey} = getPublicEnvironment();
-
-    const response = await fetch(`${inditexApiUrl}?image=http://localhost:3000/image/${image}`, {
+async function getSimilarProducts(image: string): Promise<RawProduct[]> {
+    const {inditexApiUrl, inditexApiKey, siteUrl, imageTest} = getPublicEnvironment();
+    let url;
+    if (imageTest) {
+        url = imageTest
+    } else {
+        url = `${siteUrl}/image/${image}`;
+    }
+    const response = await ky(`${inditexApiUrl}?image=${url}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${inditexApiKey}`,
             'user-agent': 'OpenPlatform/1.0',
+            'accept': 'application/json',
         }
     });
-
     return response.json();
 }
 
-export default async function Page(props: { params: Promise<{ image: string }>}){
-    const { image } = await props.params;
-    const similarProducts = await getSimilarProducts(image);
-    const products = similarProducts.map((product: Product, idx: number) => <li key={idx}>{product.name}</li>);
+
+function getFirstGroup(html: string, regex: RegExp) {
+    return Array.from(html.matchAll(regex), m => m[1]);
+}
+
+export default async function Page(props: { params: Promise<{ image: string }> }) {
+    const {image} = await props.params;
+    const {siteUrl} = getPublicEnvironment();
+    const rawSimilarProducts = await getSimilarProducts(image);
+    const similarProducts: Product[] = [];
+
+    if (!rawSimilarProducts || rawSimilarProducts.length === 0) {
+        return (
+            <div className='flex flex-col items-center'>
+                <h1>No results</h1>
+            </div>
+        )
+    }
+
+    for (const product of rawSimilarProducts) {
+        const firstFetch = fetch(product.link, {
+            method: 'GET',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                'Host': "zara.com",
+            }
+        });
+
+        const firstHtml = await ((await firstFetch).text());
+        const baseURL = (await firstFetch).url; // Reemplaza con la URL original
+        const bmVerifyToken = getFirstGroup(firstHtml, /bm-verify=(.*)'"/g).pop(); // Extraído manualmente del HTML
+        const fetchHtml = fetch(`${baseURL}?bm-verify=${bmVerifyToken}`);
+        const html = await ((await fetchHtml).text());
+        const imageSrc = html.match(/https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || `${siteUrl}/images/noImage.png`;
+        similarProducts.push({
+            ...rawSimilarProducts[similarProducts.length],
+            imageSrc,
+        });
+    }
 
     return (
-        <ul>{ products }</ul>
-        
+        <div className='flex flex-col items-center'>
+            <h1>Similar results</h1>
+            <div className='flex flex-row gap-4'>
+                {similarProducts.map((product: Product, idx: number) => <Card key={idx} productInfo={product}/>)}
+            </div>
+        </div>
     )
 }
