@@ -1,5 +1,4 @@
 "use client";
-import Image from 'next/image';
 import { useState } from 'react';
 import ImageUploader from '@/components/ui/ImageUploader';
 import {useRouter} from 'next/navigation';

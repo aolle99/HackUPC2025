@@ -3,10 +3,10 @@ import ImageStorageService from '@/lib/imageStore';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ image: string }> }
 ) {
     try {
-        const {id: imageId} = await params;
+        const {image: imageId} = await params;
         const imageStorage = ImageStorageService.getInstance();
         const image = imageStorage.getImage(imageId);
 
