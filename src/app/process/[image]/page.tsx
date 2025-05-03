@@ -59,10 +59,10 @@ export default async function Page(props: { params: Promise<{ image: string }>})
         console.error("primera iteración");
         const baseURL = (await firstFetch).url; // Reemplaza con la URL original
         const bmVerifyToken = getFirstGroup(firstHtml, /bm-verify=(.*)'"/g).pop(); // Extraído manualmente del HTML
-
+        console.error(firstHtml)
         const fetchHtml = fetch(`${baseURL}?bm-verify=${bmVerifyToken}`);
         const html = await ((await fetchHtml).text());
-        console.error("segunda iteración");
+        console.error(html);
         // Find the product image
         const imageSrc = html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || `${siteUrl}/images/noImage.png`;
         console.error("tercera iteración");
