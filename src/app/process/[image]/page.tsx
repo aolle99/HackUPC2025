@@ -4,16 +4,22 @@ import { Card } from '@/lib/Card';
 import { Product, RawProduct } from '@/lib/Product';
 
 async function getSimilarProducts(image: string): Promise<RawProduct[]>{
-    const {inditexApiUrl, inditexApiKey, siteUrl} = getPublicEnvironment();
-
-    const response = await ky(`${inditexApiUrl}?image=${siteUrl}/image/${image}`, {
+    const {inditexApiUrl, inditexApiKey, siteUrl, imageTest} = getPublicEnvironment();
+    let url;
+    if(imageTest){
+        url = imageTest
+    }
+    else{
+        url = `${siteUrl}/image/${image}`;
+    }
+    const response = await ky(`${inditexApiUrl}?image=${url}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${inditexApiKey}`,
             'user-agent': 'OpenPlatform/1.0',
+            'accept': 'application/json',
         }
     });
-
     return response.json();
 }
 
@@ -25,8 +31,15 @@ function getFirstGroup(html: string, regex: RegExp) {
 export default async function Page(props: { params: Promise<{ image: string }>}){
     const { image } = await props.params;
     const rawSimilarProducts = await getSimilarProducts(image);
-
     const similarProducts: Product[] = [];
+
+    if (!rawSimilarProducts || rawSimilarProducts.length === 0) {
+        return (
+            <div className='flex flex-col items-center'>
+                <h1>No results</h1>
+            </div>
+        )
+    }
 
     for (const product of rawSimilarProducts) {
 
@@ -41,10 +54,8 @@ export default async function Page(props: { params: Promise<{ image: string }>})
 
         const fetchHtml = fetch(`${baseURL}?bm-verify=${bmVerifyToken}`);
         const html = await ((await fetchHtml).text());
-        console.log(html);
         // Find the product image
-        const imageSrc = html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || "";
-        console.log(html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g));
+        const imageSrc = html.match( /https:\/\/static\.zara\.net\/assets\/public[^\?]*\.jpg/g)?.shift() || "https://fakeimg.pl/600x400?text=No+Content+Available&font_size=50";
         similarProducts.push({
             ...rawSimilarProducts[similarProducts.length],
             imageSrc,
