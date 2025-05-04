@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BúsquedaVisual - Encuentra Productos con Imágenes
 
-## Getting Started
+![Next.js](https://img.shields.io/badge/Next.js-15.3.1-000000?logo=next.js)
+![React](https://img.shields.io/badge/React-19.0.0-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0.0-3178C6?logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0.0-38B2AC?logo=tailwind-css)
+![License](https://img.shields.io/badge/Licencia-MIT-green)
 
-First, run the development server:
+## 🔍 Visión General
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Inditex Visual Search es una aplicación web moderna que permite a los usuarios encontrar productos similares subiendo imágenes, capturando fotos con la cámara o introduciendo URLs de imágenes. Desarrollada para HackUPC 2025, esta herramienta utiliza tecnologías avanzadas para simplificar la búsqueda de moda y productos visuales.
+
+![Screenshot de la aplicación](public/screenshot.png)
+
+## ✨ Características
+
+- **Múltiples métodos de entrada**: Sube imágenes, captura con la cámara o ingresa URLs de imágenes
+- **Búsqueda visual**: Encuentra productos similares basados en imágenes
+- **Interfaz moderna**: Diseño responsivo y atractivo con Tailwind CSS
+- **Rendimiento optimizado**: Carga rápida y experiencia fluida
+
+## 🛠️ Tecnologías
+
+- **Frontend**: React 19.0.0, Next.js 15.3.1
+- **Estilizado**: Tailwind CSS, clsx, tailwind-merge
+- **Componentes UI**: Componentes de Radix UI
+- **Iconos**: Lucide React
+- **HTTP Cliente**: ky
+- **Herramientas de desarrollo**: TypeScript, ESLint
+
+## 📋 Requisitos Previos
+
+- Node.js 18.0.0 o superior
+- npm, yarn, pnpm o bun
+
+## 🚀 Instalación
+
+1. **Clona el repositorio**
+```
+bash
+git clone https://github.com/tu-usuario/busqueda-visual.git
+cd busqueda-visual
+```
+2. **Instala las dependencias**
+```
+bash
+npm install
+# o
+yarn install
+# o
+pnpm install
+# o
+bun install
+```
+3. **Configura las variables de entorno**
+
+Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+INDITEX_API_URL=tu_url_api
+INDITEX_OAUTH_URL=tu_url_oauth
+INDITEX_OAUTH_CLIENT_ID=tu_cliente_id
+INDITEX_OAUTH_CLIENT_SECRET=tu_cliente_secret
+SITE_URL=http://localhost:3000
+```
+4. **Inicia el servidor de desarrollo**
+```
+bash
+npm run dev
+# o
+yarn dev
+# o
+pnpm dev
+# o
+bun dev
+```
+5. **Abre [http://localhost:3000](http://localhost:3000) en tu navegador**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Esto iniciará todos los servicios necesarios y la aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## 📝 Uso
 
-To learn more about Next.js, take a look at the following resources:
+1. **Selecciona un método de entrada de imagen**:
+   - Subir una imagen desde tu dispositivo
+   - Capturar una imagen con la cámara
+   - Ingresar la URL de una imagen
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Procesa la imagen** haciendo clic en el botón correspondiente
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Explora los resultados** de productos similares
 
-## Deploy on Vercel
+4. **Haz clic en cualquier producto** para ver más detalles o visitar la tienda
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 Pruebas
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Para ejecutar las pruebas:
+```
+bash
+npm run test
+# o
+yarn test
+```
+Para verificar la calidad del código:
+```
+bash
+npm run lint
+# o
+yarn lint
+```
+## 🏗️ Construcción para Producción
+
+```bash
+npm run build
+# o
+yarn build
+```
+```
+
+
+## 🤝 Autoría
+* **Àlex Ollé** - [![GitHub](https://img.shields.io/badge/GitHub-aolle99-181717?style=flat-square&logo=github)](https://github.com/aolle99) - alex.olle@estudiantat.upc.edu
+* **Arnau Casau** - [![GitHub](https://img.shields.io/badge/GitHub-arnaucasau-181717?style=flat-square&logo=github)](https://github.com/arnaucasau) - arnau.casau@estudiantat.upc.edu
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+
+## 👏 Agradecimientos
+
+- HackUPC 2025 por la oportunidad de desarrollar este proyecto
+- Todos los colaboradores y participantes

@@ -7,6 +7,7 @@ import {CameraCapture} from "@/components/ui/CameraCapture";
 import {Button} from "@/components/ui/button";
 import {ChevronLeft, Send} from "lucide-react";
 import {Product} from "@/lib/Product";
+import {UrlImageUploader} from "@/components/ui/UrlImageUploader";
 
 interface SkeletonCardProps {
     className?: string;
@@ -24,7 +25,7 @@ function SkeletonCard({className}: SkeletonCardProps) {
             <div className="h-auto min-h-44 rounded-md w-full bg-muted/60"/>
 
             {/* Skeleton para el contenido */}
-            <div className="p-4 space-y-3">
+            <div className="p-4 space-y-3 w-full ">
                 {/* Marca */}
                 <div className="h-3 w-16 bg-muted/80 rounded animate-pulse"/>
 
@@ -43,7 +44,7 @@ function SkeletonCard({className}: SkeletonCardProps) {
 
 
 export function AppDemo() {
-    const [activeTab, setActiveTab] = useState<"upload" | "camera">("upload");
+    const [activeTab, setActiveTab] = useState<"upload" | "camera" | "input">("upload");
     const [uploadedImage, setUploadedImage] = useState<string | null>(null);
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const [step, setStep] = useState(0);
@@ -112,6 +113,7 @@ export function AppDemo() {
     const tabs = [
         {id: "upload", label: "Subir foto"},
         {id: "camera", label: "Usar cámara"},
+        {id: "input", label: "Ingresar URL"},
     ];
 
     return (
@@ -170,6 +172,13 @@ export function AppDemo() {
                                     isActive={activeTab === "camera"}
                                 />
                             )}
+                            {activeTab === "input" && (
+                                <UrlImageUploader
+                                    onImageCapture={handleImageCapture}
+                                    isActive={activeTab === "input"}
+                                    className={"w-full h-full"}
+                                    />
+                            )}
                         </div>
                         <div className="flex justify-center mt-4 mb-2">
                             <Button
@@ -222,6 +231,16 @@ export function AppDemo() {
                                 <SkeletonCard key={`skeleton-${idx}`}/>
                             ))
 
+                        )}
+                        {results && results.length === 0 && (
+                        <div className="flex flex-col items-center justify-center h-full bg-card rounded-xl shadow-lg p-4">
+                            <h3 className="text-xl font-bold tracking-tight sm:text-2xl text-red-500">
+                                No se encontraron resultados
+                            </h3>
+                            <p className="mt-4 text-muted-foreground">
+                                Intenta con otra imagen o verifica la calidad de la imagen.
+                            </p>
+                        </div>
                         )}
                     </div>
                     {results && results.length > 0 && (
