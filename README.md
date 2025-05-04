@@ -52,7 +52,13 @@ pnpm install
 # o
 bun install
 ```
-3. **Configura las variables de entorno**
+3. **Obtener credenciales API Inditex**
+- Ir al [Portal de desarrolladores de Inditex](https://developer.inditex.com/)
+- Crear una nueva cuenta o usar una existente
+- Crear una aplicacion y añadir la API de Visual Search
+- Seleccionar los permisos de read
+
+5. **Configura las variables de entorno**
 
 Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 ```
@@ -63,7 +69,7 @@ INDITEX_OAUTH_CLIENT_ID=tu_cliente_id
 INDITEX_OAUTH_CLIENT_SECRET=tu_cliente_secret
 SITE_URL=http://localhost:3000
 ```
-4. **Inicia el servidor de desarrollo**
+5. **Inicia el servidor de desarrollo**
 ```
 bash
 npm run dev
@@ -74,7 +80,7 @@ pnpm dev
 # o
 bun dev
 ```
-5. **Abre [http://localhost:3000](http://localhost:3000) en tu navegador**
+6. **Abre [http://localhost:3000](http://localhost:3000) en tu navegador**
 
 
 Esto iniciará todos los servicios necesarios y la aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
@@ -114,8 +120,6 @@ yarn lint
 npm run build
 # o
 yarn build
-```
-```
 ```
 
 
