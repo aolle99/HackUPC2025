@@ -2,23 +2,23 @@
 const steps = [
   {
     id: 1,
-    title: "Captura o sube una imagen",
+    title: "Sube o arrastra una imagen",
     description:
-      "Utiliza la cámara de tu dispositivo o sube una foto de una prenda que te guste.",
+      "Utiliza el selector de ficheros de tu equipo o arrastra una foto de una prenda que te guste.",
     image: "/images/paso1.png", // Imágenes de ejemplo - reemplazar con las reales
   },
   {
     id: 2,
-    title: "Análisis visual inteligente",
+    title: "Usa la cámara de tu dispositivo",
     description:
-      "Nuestra IA analiza la imagen identificando características clave como color, patrón, forma y estilo.",
+      "Toma una foto de la prenda que deseas encontrar. Asegúrate de que esté bien iluminada y enfocada.",
     image: "/images/paso2.png",
   },
   {
     id: 3,
-    title: "Búsqueda en catálogo",
+    title: "Comprueba que es la prenda correcta",
     description:
-      "El sistema busca en tiempo real en el extenso catálogo de Inditex para encontrar prendas similares.",
+      "Verifica que la imagen sea la prenda que deseas buscar. Una vez confirmada, haz clic en 'Procesar'.",
     image: "/images/paso3.png",
   },
   {
