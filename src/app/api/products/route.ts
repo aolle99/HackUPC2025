@@ -1,25 +1,64 @@
-import {NextRequest, NextResponse} from "next/server";
-import {getPublicEnvironment} from "@/lib/utils";
-import {Product, RawProduct} from '@/lib/Product';
+import { NextRequest, NextResponse } from "next/server";
+import { getPublicEnvironment } from "@/lib/utils";
+import { authClient } from "@/lib/auth-client";
+import { Product, RawProduct } from '@/lib/Product';
 import ky from "ky";
 
 async function getSimilarProducts(image: string, page: string = '1'): Promise<RawProduct[]> {
-    const {inditexApiUrl, inditexApiKey, siteUrl, imageTest} = getPublicEnvironment();
+    const { inditexApiUrl, siteUrl, imageTest } = getPublicEnvironment();
     let url;
     if (imageTest) {
-        url = imageTest
+        url = imageTest;
     } else {
         url = `${siteUrl}/image/${image}`;
     }
-    const response = await ky(`${inditexApiUrl}?image=${url}&page=${page}&perPage=6`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${inditexApiKey}`,
-            'user-agent': 'OpenPlatform/1.0',
-            'accept': 'application/json',
+
+    try {
+        // Obtener token Bearer usando el cliente de autenticación
+        const token = await authClient.getBearerToken();
+        const response = await ky(`${inditexApiUrl}?image=${url}&page=${page}&perPage=6`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'user-agent': 'OpenPlatform/1.0',
+                'accept': 'application/json',
+            },
+            timeout: 30000,
+            retry: {
+                limit: 2,
+                methods: ['GET'],
+                statusCodes: [408, 429, 500, 502, 503, 504],
+            },
+        });
+        
+        return response.json();
+    } catch (error) {
+        console.error('Error al obtener productos similares:', error);
+        
+        // Si hay un error de autenticación, intentar invalidar el token y reintentar una vez
+        // @ts-expect-error type mismatch
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+            console.log('Error de autenticación, regenerando token...');
+            authClient.invalidateToken();
+            
+            // Reintentar con un nuevo token
+            const newToken = await authClient.getBearerToken();
+            
+            const response = await ky(`${inditexApiUrl}?image=${url}&page=${page}&perPage=6`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${newToken}`,
+                    'user-agent': 'OpenPlatform/1.0',
+                    'accept': 'application/json',
+                },
+                timeout: 30000,
+            });
+            
+            return response.json();
         }
-    });
-    return response.json();
+        
+        throw error;
+    }
 }
 
 function getFirstGroup(html: string, regex: RegExp) {

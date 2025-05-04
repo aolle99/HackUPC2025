@@ -1,20 +1,24 @@
-import {getPublicEnvironment} from '@/lib/utils';
+import {getPublicEnvironment, getOAuthToken} from '@/lib/utils';
 import ky from 'ky';
 import {Card} from '@/lib/Card';
 import {Product, RawProduct} from '@/lib/Product';
 
 async function getSimilarProducts(image: string): Promise<RawProduct[]> {
-    const {inditexApiUrl, inditexApiKey, siteUrl, imageTest} = getPublicEnvironment();
+    const {inditexApiUrl, siteUrl, imageTest} = getPublicEnvironment();
     let url;
     if (imageTest) {
         url = imageTest
     } else {
         url = `${siteUrl}/image/${image}`;
     }
+
+    // Get OAuth token
+    const token = await getOAuthToken();
+
     const response = await ky(`${inditexApiUrl}?image=${url}`, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${inditexApiKey}`,
+            'Authorization': `Bearer ${token}`,
             'user-agent': 'OpenPlatform/1.0',
             'accept': 'application/json',
         }
