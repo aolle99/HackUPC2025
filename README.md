@@ -10,7 +10,7 @@
 
 Inditex Visual Search es una aplicación web moderna que permite a los usuarios encontrar productos similares subiendo imágenes, capturando fotos con la cámara o introduciendo URLs de imágenes. Desarrollada para HackUPC 2025, esta herramienta utiliza tecnologías avanzadas para simplificar la búsqueda de moda y productos visuales.
 
-![Screenshot de la aplicación](public/screenshot.png)
+![Screenshot de la aplicación](public/images/paso4.png)
 
 ## ✨ Características
 
